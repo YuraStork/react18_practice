@@ -1,0 +1,6 @@
+.wrapper{
+  display: grid;
+  min-height: 100vh;
+  grid-template: 50px 1fr / 1fr;
+  align-items: stretch;
+}
