@@ -4,12 +4,17 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const path = require("path");
 const DevelopmentMode = process.env.DEVELOPMENT_MODE;
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin")
 
 module.exports = {
   mode: DevelopmentMode,
   context: path.resolve(__dirname),
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   devtool: "inline-source-map",
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
+  },
   output: {
     filename: "index.js",
     path: path.resolve(__dirname, "build"),
@@ -23,6 +28,12 @@ module.exports = {
       directory: path.join(__dirname, "public/assets"),
     },
   },
+
+  optimization: {
+    minimize: DevelopmentMode === "production",
+    minimizer: [new OptimizeCssAssetsPlugin(), new TerserPlugin()],
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
@@ -47,7 +58,51 @@ module.exports = {
           "css-loader",
           "sass-loader",
         ],
-      }
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+          },
+        },
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-typescript"],
+          },
+        },
+      },
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
+      },
+      {
+        test: /\.tsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env",
+              "@babel/preset-typescript",
+              ["@babel/preset-react", { runtime: "automatic" }],
+            ],
+          },
+        },
+      },
     ],
   },
 };
