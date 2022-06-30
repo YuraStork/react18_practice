@@ -10,10 +10,13 @@ const TerserPlugin = require("terser-webpack-plugin")
 module.exports = {
   mode: DevelopmentMode,
   context: path.resolve(__dirname),
-  entry: "./src/index.ts",
+  entry: "./src/index.tsx",
   devtool: "inline-source-map",
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      "components": path.resolve(__dirname, "src", "components")
+    }
   },
   output: {
     filename: "index.js",
