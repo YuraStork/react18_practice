@@ -4,8 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const path = require("path");
 const DevelopmentMode = process.env.DEVELOPMENT_MODE;
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin")
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   mode: DevelopmentMode,
@@ -13,10 +13,11 @@ module.exports = {
   entry: "./src/index.tsx",
   devtool: "inline-source-map",
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
     alias: {
-      "components": path.resolve(__dirname, "src", "components")
-    }
+      components: path.resolve(__dirname, "src", "components"),
+      styles: path.resolve(__dirname, "src", "styles"),
+    },
   },
   output: {
     filename: "index.js",
@@ -56,11 +57,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader",
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.js$/,
